@@ -101,6 +101,12 @@ class CeleryConfig(object):
 CELERY_CONFIG = CeleryConfig
 # SLACK_API_TOKEN="Xob-not-a-real-token"
 FEATURE_FLAGS = {"ALERT_REPORTS": True,"ENABLE_AWS": True}
+
+#AWS Credentials
+# AWS_ACCESS_KEY = '###############'
+# AWS_SECRET_KEY = '###############'
+# AWS_REGION = '#######'
+
 # ALERT_REPORTS_NOTIFICATION_DRY_RUN = True
 WEBDRIVER_BASEURL = "http://superset:8088/"
 # The base URL for the email report hyperlinks.
