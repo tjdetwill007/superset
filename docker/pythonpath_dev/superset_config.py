@@ -99,7 +99,7 @@ class CeleryConfig(object):
 
 
 CELERY_CONFIG = CeleryConfig
-
+# SLACK_API_TOKEN="Xob-not-a-real-token"
 FEATURE_FLAGS = {"ALERT_REPORTS": True,"ENABLE_AWS": True}
 # ALERT_REPORTS_NOTIFICATION_DRY_RUN = True
 WEBDRIVER_BASEURL = "http://superset:8088/"

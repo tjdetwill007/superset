@@ -406,12 +406,23 @@ def cached_common_bootstrap_data(user: User) -> Dict[str, Any]:
         k: (list(conf.get(k)) if isinstance(conf.get(k), set) else conf.get(k))
         for k in FRONTEND_CONF_KEYS
     }
-
-    if conf.get("SLACK_API_TOKEN"):
+    isAwsConfigured = get_feature_flags()['ENABLE_AWS'] if "ENABLE_AWS" in get_feature_flags() else False
+    if conf.get("SLACK_API_TOKEN") and not isAwsConfigured:
+            frontend_config["ALERT_REPORTS_NOTIFICATION_METHODS"] = [
+                ReportRecipientType.EMAIL,
+                ReportRecipientType.SLACK,
+            ]
+    elif isAwsConfigured and conf.get("SLACK_API_TOKEN"):
         frontend_config["ALERT_REPORTS_NOTIFICATION_METHODS"] = [
             ReportRecipientType.EMAIL,
             ReportRecipientType.SLACK,
-        ]
+            ReportRecipientType.S3,
+            ]
+    elif isAwsConfigured:
+        frontend_config["ALERT_REPORTS_NOTIFICATION_METHODS"] = [
+            ReportRecipientType.EMAIL,
+            ReportRecipientType.S3,
+            ]
     else:
         frontend_config["ALERT_REPORTS_NOTIFICATION_METHODS"] = [
             ReportRecipientType.EMAIL,
