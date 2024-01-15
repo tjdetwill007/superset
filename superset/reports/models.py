@@ -156,6 +156,7 @@ class ReportSchedule(Model, AuditMixinNullable, ExtraJSONMixin):
     aws_key=Column(String(100))
     aws_secretKey=Column(String(100))
     aws_arn_role=Column(String(200))
+    aws_S3_types=Column(String(200))
     extra: ReportScheduleExtra  # type: ignore
 
     def __repr__(self) -> str:

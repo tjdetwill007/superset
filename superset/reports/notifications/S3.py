@@ -14,12 +14,15 @@ from superset.utils.decorators import statsd_gauge
 
 logger = logging.getLogger(__name__)
 
+
+
 class S3Notification(BaseNotification):
 
     type = ReportRecipientType.S3
     
     def send(self):
         print(f"Testing the aws keys from ui:{self._content.aws_key}")
+
         images = {}
         report_name= self._content.name
         current_datetime = datetime.datetime.now()
