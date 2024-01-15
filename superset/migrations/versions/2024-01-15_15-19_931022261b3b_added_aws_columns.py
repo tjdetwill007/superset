@@ -14,31 +14,29 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-"""add_timezone_to_report_schedule
+"""Added aws columns
 
-Revision ID: ae1ed299413b
-Revises: 030c840e3a1c
-Create Date: 2021-07-09 12:18:52.057815
+Revision ID: 931022261b3b
+Revises: f3c2d8ec8595
+Create Date: 2024-01-15 15:19:52.548672
 
 """
 
 # revision identifiers, used by Alembic.
-revision = "ae1ed299413b"
-down_revision = "030c840e3a1c"
+revision = '931022261b3b'
+down_revision = 'f3c2d8ec8595'
 
-import sqlalchemy as sa
 from alembic import op
-
+import sqlalchemy as sa
+from sqlalchemy.dialects import postgresql
 
 def upgrade():
-    with op.batch_alter_table("report_schedule") as batch_op:
-        batch_op.add_column(
-            sa.Column(
-                "timezone", sa.String(length=100), nullable=False, server_default="UTC"
-            )
-        )
+
+    op.add_column('report_schedule', sa.Column('aws_key', sa.String(length=100), nullable=True))
+    op.add_column('report_schedule', sa.Column('aws_secretKey', sa.String(length=100), nullable=True))
+    op.add_column('report_schedule', sa.Column('aws_arn_role', sa.String(length=200), nullable=True))
+    
 
 
 def downgrade():
-    with op.batch_alter_table("report_schedule") as batch_op:
-        batch_op.drop_column("timezone")
+   pass

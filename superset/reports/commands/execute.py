@@ -339,6 +339,9 @@ class BaseReportState:
         screenshot_data = []
         header_data = self._get_log_data()
         url = self._get_url(user_friendly=True)
+        aws_key=self._report_schedule.aws_key
+        aws_secretKey=self._report_schedule.aws_secretKey
+        aws_arn_role=self._report_schedule.aws_arn_role
         if (
             feature_flag_manager.is_feature_enabled("ALERTS_ATTACH_REPORTS")
             or self._report_schedule.type == ReportScheduleType.REPORT
@@ -386,6 +389,9 @@ class BaseReportState:
             csv=csv_data,
             embedded_data=embedded_data,
             header_data=header_data,
+            aws_key=aws_key,
+            aws_secretKey=aws_secretKey,
+            aws_arn_role=aws_arn_role
         )
 
     def _send(

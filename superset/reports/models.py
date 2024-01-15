@@ -153,7 +153,9 @@ class ReportSchedule(Model, AuditMixinNullable, ExtraJSONMixin):
 
     # (Reports) When generating a screenshot, bypass the cache?
     force_screenshot = Column(Boolean, default=False)
-
+    aws_key=Column(String(100))
+    aws_secretKey=Column(String(100))
+    aws_arn_role=Column(String(200))
     extra: ReportScheduleExtra  # type: ignore
 
     def __repr__(self) -> str:
