@@ -317,3 +317,4 @@ class ReportSchedulePutSchema(Schema):
     aws_key = fields.String(default=None, missing=None)
     aws_secretKey = fields.String(default=None, missing=None)
     aws_arn_role = fields.String(default=None, missing=None)
+    aws_S3_types= fields.String(default=None, missing=None)
