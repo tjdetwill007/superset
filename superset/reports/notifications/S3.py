@@ -22,7 +22,8 @@ class S3Notification(BaseNotification):
     
     def send(self):
         print(f"Testing the aws keys from ui:{self._content.aws_key}")
-
+        if self._content.aws_S3_types:
+            print(f"Testing the s3 types:{self._content.aws_S3_types}")
         images = {}
         report_name= self._content.name
         current_datetime = datetime.datetime.now()
