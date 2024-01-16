@@ -74,6 +74,8 @@ export const NotificationMethod: FunctionComponent<NotificationMethodProps> = ({
     recipients || '',
   );
   const theme = useTheme();
+  const s3SubTypes = ['AWS_S3_credentials','AWS_S3_pyconfig','AWS_S3_IAM'];
+  const [s3Method,setS3Method]=useState(s3SubTypes[0]);
 
   if (!setting) {
     return null;
@@ -134,7 +136,9 @@ export const NotificationMethod: FunctionComponent<NotificationMethodProps> = ({
               value={method}
             />
           </div>
+          
         </StyledInputContainer>
+        
         {method !== undefined && !!onRemove ? (
           <span
             role="button"
@@ -146,7 +150,23 @@ export const NotificationMethod: FunctionComponent<NotificationMethodProps> = ({
           </span>
         ) : null}
       </div>
-      {method !== undefined ? (
+      {method === 'S3' && 
+      <div className="inline-container">
+        <StyledInputContainer>
+          <div className="input-container">
+            <Select
+              ariaLabel={t('S3 methods')}
+              data-test="select-S3-methods"
+              // onChange={onMethodChange}
+              placeholder={t('Select S3 Method')}
+              options={s3SubTypes.map(option => option)}
+              value={s3Method}
+            />
+          </div>
+          
+        </StyledInputContainer>
+        </div>}
+      {method !== undefined && method === 'Email'  ? (
         <StyledInputContainer>
           <div className="control-label">{t(method)}</div>
           <div className="input-container">
