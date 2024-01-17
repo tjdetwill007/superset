@@ -22,6 +22,8 @@ import { Select } from 'src/components';
 import Icons from 'src/components/Icons';
 import { NotificationMethodOption } from 'src/views/CRUD/alert/types';
 import { StyledInputContainer } from '../AlertReportModal';
+import LabeledErrorBoundInput from 'src/components/Form/LabeledErrorBoundInput';
+import { noBottomMargin } from 'src/components/ReportModal/styles';
 
 const StyledNotificationMethod = styled.div`
   margin-bottom: 10px;
@@ -74,8 +76,12 @@ export const NotificationMethod: FunctionComponent<NotificationMethodProps> = ({
     recipients || '',
   );
   const theme = useTheme();
-  const s3SubTypes = ['AWS_S3_credentials','AWS_S3_pyconfig','AWS_S3_IAM'];
-  const [s3Method,setS3Method]=useState(s3SubTypes[0]);
+  const s3SubTypes = ['AWS_S3_credentials', 'AWS_S3_pyconfig', 'AWS_S3_IAM'];
+  const [s3Method, setS3Method] = useState(null);
+  const [bucketName, setBucketName] = useState<string>('');
+  const [accessKey, setAccessKey] = useState<string>('');
+  const [secretKey, setSecretKey] = useState<string>('');
+  const [iam, setIam] = useState<string>('');
 
   if (!setting) {
     return null;
@@ -116,7 +122,24 @@ export const NotificationMethod: FunctionComponent<NotificationMethodProps> = ({
   if (!!recipients && recipientValue !== recipients) {
     setRecipientValue(recipients);
   }
+  const handleS3Method = (e: any) => {
+    console.log(e, 'value');
+    setS3Method(e);
+  };
+  const handleAccesskey = (e: any) => {
+    setAccessKey(e.target.value);
+  };
+  const handleSecretkey = (e: any) => {
+    setSecretKey(e.target.value);
+  };
+  const handleIamkey = (e: any) => {
+    setIam(e.target.value);
+  };
 
+  const handleBucketName = (e: any) => {
+    const newBucketName = e.target.value;
+    setBucketName(newBucketName);
+  };
   return (
     <StyledNotificationMethod>
       <div className="inline-container">
@@ -136,9 +159,8 @@ export const NotificationMethod: FunctionComponent<NotificationMethodProps> = ({
               value={method}
             />
           </div>
-          
         </StyledInputContainer>
-        
+
         {method !== undefined && !!onRemove ? (
           <span
             role="button"
@@ -150,23 +172,106 @@ export const NotificationMethod: FunctionComponent<NotificationMethodProps> = ({
           </span>
         ) : null}
       </div>
-      {method === 'S3' && 
-      <div className="inline-container">
-        <StyledInputContainer>
-          <div className="input-container">
-            <Select
-              ariaLabel={t('S3 methods')}
-              data-test="select-S3-methods"
-              // onChange={onMethodChange}
-              placeholder={t('Select S3 Method')}
-              options={s3SubTypes.map(option => option)}
-              value={s3Method}
-            />
-          </div>
-          
-        </StyledInputContainer>
-        </div>}
-      {method !== undefined && method === 'Email'  ? (
+      {method === 'S3' && (
+        <div className="inline-container">
+          <StyledInputContainer>
+            <div className="input-container">
+              <Select
+                ariaLabel={t('S3 methods')}
+                data-test="select-delivery-method"
+                onChange={handleS3Method}
+                placeholder={t('Select S3 Method')}
+                options={s3SubTypes.map((option: string) => ({
+                  label: option,
+                  value: option,
+                }))}
+                value={s3Method}
+              />
+            </div>
+          </StyledInputContainer>
+        </div>
+      )}
+      {s3Method === 'AWS_S3_credentials' && method !== 'Email' && (
+        <div>
+          <div className="control-label">{t('Bucket Name')}</div>
+          <LabeledErrorBoundInput
+            type="text"
+            placeholder={t('Type[Bucket Name]')}
+            name="bucketName"
+            value={bucketName}
+            validationMethods={{
+              onChange: handleBucketName,
+            }}
+            css={noBottomMargin}
+          />
+
+          <div className="control-label">{t('Access Key')}</div>
+          <LabeledErrorBoundInput
+            type="password"
+            placeholder={t('Type[Access Key]')}
+            name="accessKey"
+            value={accessKey}
+            validationMethods={{
+              onChange: handleAccesskey,
+            }}
+            css={noBottomMargin}
+          />
+          <div className="control-label">{t('Secret Key')}</div>
+          <LabeledErrorBoundInput
+            type="password"
+            placeholder={t('Type[Secret Key]')}
+            name="secretKey"
+            value={secretKey}
+            validationMethods={{
+              onChange: handleSecretkey,
+            }}
+            css={noBottomMargin}
+          />
+        </div>
+      )}
+      {s3Method === 'AWS_S3_IAM' && method !== 'Email' && (
+        <>
+          <div className="control-label">{t('AWS IAM ROLE')}</div>
+          <LabeledErrorBoundInput
+            type="password"
+            placeholder={t('Type[ AWS IAM ROLE ]')}
+            name="bucketName"
+            value={iam}
+            onChange={e => setIam(e.target.value)}
+            validationMethods={{
+              onChange: handleIamkey,
+            }}
+            css={noBottomMargin}
+          />
+          <div className="control-label">{t('Bucket Name')}</div>
+          <LabeledErrorBoundInput
+            type="text"
+            placeholder="Type[Bucket Name]"
+            name="bucketName"
+            value={bucketName}
+            validationMethods={{
+              onChange: handleBucketName,
+            }}
+            css={noBottomMargin}
+          />
+        </>
+      )}
+      {s3Method === 'AWS_S3_pyconfig' && method !== 'Email' && (
+        <>
+          <div className="control-label">{t('Bucket Name')}</div>
+          <LabeledErrorBoundInput
+            type="text"
+            placeholder="Type[Bucket Name]"
+            name="bucketName"
+            value={bucketName}
+            validationMethods={{
+              onChange: handleBucketName,
+            }}
+            css={noBottomMargin}
+          />
+        </>
+      )}
+      {method !== undefined && method === 'Email' ? (
         <StyledInputContainer>
           <div className="control-label">{t(method)}</div>
           <div className="input-container">
