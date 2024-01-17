@@ -103,9 +103,9 @@ CELERY_CONFIG = CeleryConfig
 FEATURE_FLAGS = {"ALERT_REPORTS": True,"ENABLE_AWS": True}
 
 #AWS Credentials
-# AWS_ACCESS_KEY = '###############'
-# AWS_SECRET_KEY = '###############'
-# AWS_REGION = '#######'
+AWS_ACCESS_KEY = '#######'
+AWS_SECRET_KEY = '###########'
+
 
 # ALERT_REPORTS_NOTIFICATION_DRY_RUN = True
 WEBDRIVER_BASEURL = "http://superset:8088/"
