@@ -128,7 +128,6 @@ export default function HeaderReportDropDown({
     if (!isFeatureEnabled(FeatureFlag.ALERT_REPORTS)) {
       return false;
     }
-  
     if (!user?.userId) {
       // this is in the case that there is an anonymous user.
       return false;
@@ -157,7 +156,7 @@ export default function HeaderReportDropDown({
     await dispatch(deleteActiveReport(report));
     setCurrentReportDeleting(null);
   };
-  const val= isFeatureEnabled(FeatureFlag.ENABLE_AWS);
+  const val = isFeatureEnabled(FeatureFlag.ENABLE_AWS);
   const shouldFetch =
     canAddReports() &&
     !!((dashboardId && prevDashboard !== dashboardId) || chart?.id);
@@ -220,7 +219,7 @@ export default function HeaderReportDropDown({
           </Menu.Item>
         </Menu>
       )
-    ) :(
+    ) : (
       <Menu selectable={false} css={onMenuHover}>
         <Menu.Item onClick={handleShowMenu}>
           {DropdownItemExtension ? (
@@ -232,7 +231,8 @@ export default function HeaderReportDropDown({
             t('Set up an email report')
           )}
         </Menu.Item>
-      </Menu>);
+      </Menu>
+    );
   const menu = () => (
     <Menu selectable={false} css={{ width: '200px' }}>
       <Menu.Item>
@@ -304,23 +304,21 @@ export default function HeaderReportDropDown({
             }
           />
           {useTextMenu ? textMenu() : iconMenu()}
-           
-        
-          { val && 
-        
-        <Menu selectable={false} css={onMenuHover}>
-          <Menu.Item onClick={handleShowMenu}>
-              {DropdownItemExtension ? (
-                <StyledDropdownItemWithIcon>
-                  <div>{t('Set up an AWS S3 report')}</div>
-                  <DropdownItemExtension />
-                </StyledDropdownItemWithIcon>
-              ) : (
-                t('Set up an AWS S3 report')
-              )}
-            </Menu.Item>
-            <Menu.Divider />
-        </Menu> } 
+          {val && (
+            <Menu selectable={false} css={onMenuHover}>
+              <Menu.Item onClick={handleShowMenu}>
+                {DropdownItemExtension ? (
+                  <StyledDropdownItemWithIcon>
+                    <div>{t('Set up an AWS S3 report')}</div>
+                    <DropdownItemExtension />
+                  </StyledDropdownItemWithIcon>
+                ) : (
+                  t('Set up an AWS S3 report')
+                )}
+              </Menu.Item>
+              <Menu.Divider />
+            </Menu>
+          )}
           {currentReportDeleting && (
             <DeleteModal
               description={t(
