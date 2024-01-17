@@ -559,6 +559,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
 
     notificationSettings.forEach(setting => {
       if (setting.method && setting.recipients.length) {
+        console.log("setting method value:",setting.method)
         recipients.push({
           recipient_config_json: {
             target: setting.recipients,
@@ -1103,7 +1104,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     <StyledModal
       className="no-content-padding"
       responsive
-      disablePrimaryButton={disableSave}
+      // disablePrimaryButton={disableSave}
       onHandledPrimaryAction={onSave}
       onHide={hide}
       primaryButtonName={
