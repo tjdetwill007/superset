@@ -160,6 +160,7 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "aws_key",
         "aws_arn_role",
         "aws_S3_types",
+        "recipients.recipient_config_json",
     ]
     add_columns = [
         "active",
