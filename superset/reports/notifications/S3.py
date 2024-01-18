@@ -34,7 +34,6 @@ class S3Notification(BaseNotification):
     
                 data = {
                     f'{name_prefix}{report_name}{random.randint(1,1000)}.csv': self._content.csv
-            
                 }
                 return data
         
@@ -59,7 +58,6 @@ class S3Notification(BaseNotification):
     def _execute_s3_upload(self, file_body, bucket_name, contentType, aws_access_key_id,aws_secret_access_key):
         
         for key,file in file_body.items():
-            print("this is the csv file:-",file)
             file = BytesIO(file)
             s3=boto3.client('s3',aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
             s3.upload_fileobj(file,bucket_name,key,ExtraArgs={
