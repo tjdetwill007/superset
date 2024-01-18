@@ -156,6 +156,10 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "recipients.type",
         "timezone",
         "type",
+        "aws_secretKey",
+        "aws_key",
+        "aws_arn_role",
+        "aws_S3_types",
     ]
     add_columns = [
         "active",
