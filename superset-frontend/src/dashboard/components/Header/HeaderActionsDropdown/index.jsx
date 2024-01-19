@@ -378,6 +378,36 @@ class HeaderActionsDropdown extends React.PureComponent {
             </Menu>
           )
         ) : null}
+
+        {!editMode ? (
+          this.state.showReportSubMenu ? (
+            <>
+              <Menu.SubMenu title={t('Manage S3 report')}>
+                <HeaderReportDropdown
+                  dashboardId={dashboardInfo.id}
+                  setShowReportSubMenu={this.setShowReportSubMenu}
+                  showReportSubMenu={this.state.showReportSubMenu}
+                  setIsDropdownVisible={setIsDropdownVisible}
+                  isDropdownVisible={isDropdownVisible}
+                  useS3TextMenu
+                  // useTextMenu
+                />
+              </Menu.SubMenu>
+              {/* <Menu.Divider /> */}
+            </>
+          ) : (
+            <Menu>
+              <HeaderReportDropdown
+                dashboardId={dashboardInfo.id}
+                setShowReportSubMenu={this.setShowReportSubMenu}
+                setIsDropdownVisible={setIsDropdownVisible}
+                isDropdownVisible={isDropdownVisible}
+                useS3TextMenu
+                // useTextMenu
+              />
+            </Menu>
+          )
+        ) : null}
         {editMode &&
           filterboxMigrationState !== FILTER_BOX_MIGRATION_STATES.CONVERTED && (
             <Menu.Item key={MENU_KEYS.SET_FILTER_MAPPING}>

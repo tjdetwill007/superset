@@ -388,6 +388,33 @@ export const useExploreAdditionalActionsMenu = (
             />
           </Menu>
         )}
+        {/* //This is for Chart */}
+        {showReportSubMenu ? (
+          <>
+            <Menu.SubMenu title={t('Manage S3 Report')}>
+              <HeaderReportDropDown
+                chart={chart}
+                setShowReportSubMenu={setShowReportSubMenu}
+                showReportSubMenu={showReportSubMenu}
+                setIsDropdownVisible={setIsDropdownVisible}
+                isDropdownVisible={isDropdownVisible}
+                // useTextMenu
+              />
+            </Menu.SubMenu>
+            <Menu.Divider />
+          </>
+        ) : (
+          <Menu>
+            <HeaderReportDropDown
+              chart={chart}
+              setShowReportSubMenu={setShowReportSubMenu}
+              setIsDropdownVisible={setIsDropdownVisible}
+              isDropdownVisible={isDropdownVisible}
+              // useTextMenu
+            />
+          </Menu>
+        )}
+        {/* //This till here is for Chart */}
         <Menu.Item key={MENU_KEYS.VIEW_QUERY}>
           <ModalTrigger
             triggerNode={

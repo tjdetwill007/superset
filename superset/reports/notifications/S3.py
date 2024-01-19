@@ -3,7 +3,7 @@ import logging
 import boto3
 from flask_babel import gettext as __
 from io import BytesIO
-import random
+from uuid import uuid4
 import datetime
 from superset import app
 from superset.exceptions import SupersetErrorsException
@@ -33,13 +33,13 @@ class S3Notification(BaseNotification):
         if self._content.csv:
     
                 data = {
-                    f'{name_prefix}{report_name}{random.randint(1,1000)}.csv': self._content.csv
+                    f'{name_prefix}{report_name}-{str(uuid4())[:8]}.csv': self._content.csv
                 }
                 return data
         
         if self._content.screenshots:
             images = {
-                f'{name_prefix}Screenshot{random.randint(1,1000)}.png': screenshot
+                f'{name_prefix}Screenshot-{str(uuid4())[:8]}.png': screenshot
                 for screenshot in self._content.screenshots
             }
             return images
@@ -55,11 +55,11 @@ class S3Notification(BaseNotification):
         temp_cred = response['Credentials']
         return temp_cred
     
-    def _execute_s3_upload(self, file_body, bucket_name, contentType, aws_access_key_id,aws_secret_access_key):
+    def _execute_s3_upload(self, file_body, bucket_name, contentType, aws_access_key_id,aws_secret_access_key,aws_session_token = None):
         
         for key,file in file_body.items():
             file = BytesIO(file)
-            s3=boto3.client('s3',aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
+            s3=boto3.client('s3',aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key,aws_session_token=aws_session_token)
             s3.upload_fileobj(file,bucket_name,key,ExtraArgs={
                 'Metadata': {'Content-Disposition': 'inline'},
                 'ContentType': contentType})
@@ -88,7 +88,8 @@ class S3Notification(BaseNotification):
                 aws_cred=self._get_aws_keys(self._content.aws_arn_role)
                 aws_access_key_id = aws_cred['AccessKeyId']
                 aws_secret_access_key = aws_cred['SecretAccessKey']
-                self._execute_s3_upload(file_body=files, bucket_name=bucket_name, contentType=file_type, aws_access_key_id= aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
+                session_token = aws_cred['SessionToken']
+                self._execute_s3_upload(file_body=files, bucket_name=bucket_name, contentType=file_type, aws_access_key_id= aws_access_key_id,aws_secret_access_key=aws_secret_access_key, aws_session_token=session_token)
 
             elif s3_Subtype == S3SubTypes.S3_CONFIG:
                 aws_access_key_id=app.config["AWS_ACCESS_KEY"]
