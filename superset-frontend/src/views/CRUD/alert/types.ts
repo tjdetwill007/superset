@@ -116,4 +116,5 @@ export enum AlertState {
 export enum RecipientIconName {
   Email = 'Email',
   Slack = 'Slack',
+  S3 = 'S3',
 }

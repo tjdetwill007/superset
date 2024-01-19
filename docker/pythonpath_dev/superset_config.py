@@ -103,7 +103,7 @@ CELERY_CONFIG = CeleryConfig
 FEATURE_FLAGS = {"ALERT_REPORTS": True,"ENABLE_AWS": True}
 
 #AWS Credentials
-AWS_ACCESS_KEY = '#######'
+AWS_ACCESS_KEY = '######'
 AWS_SECRET_KEY = '###########'
 
 
