@@ -386,13 +386,10 @@ class BaseReportState:
             description=self._report_schedule.description,
             csv=csv_data,
             embedded_data=embedded_data,
-            header_data=header_data,
-            aws_key=aws_key,
-            aws_secretKey=aws_secretKey,
-            aws_arn_role=aws_arn_role,
-            aws_S3_types=aws_S3_types
+            header_data=header_data
         )
     def _get_aws_configuration(self) -> AwsConfiguration:
+        
         aws_key=self._report_schedule.aws_key
         aws_secretKey=self._report_schedule.aws_secretKey
         aws_arn_role=self._report_schedule.aws_arn_role

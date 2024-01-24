@@ -71,6 +71,12 @@ type SelectValue = {
   value: string;
   label: string;
 };
+interface S3NotificationSettings {
+  aws_secretKey: string;
+  aws_key: string;
+  aws_arn_role: string;
+  aws_S3_types: string;
+}
 
 interface AlertReportModalProps {
   addSuccessToast: (msg: string) => void;
@@ -489,7 +495,15 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
   const formatOptionEnabled =
     contentType === 'chart' &&
     (isFeatureEnabled(FeatureFlag.ALERTS_ATTACH_REPORTS) || isReport);
+  const initialSettings: S3NotificationSettings = {
+    aws_secretKey: '',
+    aws_key: '',
+    aws_arn_role: '',
+    aws_S3_types: '',
+  };
 
+  const [s3NotificationSettings, setS3NotificationSettings] =
+    useState<S3NotificationSettings>(initialSettings);
   const [notificationAddState, setNotificationAddState] =
     useState<NotificationAddStatus>('active');
   const [notificationSettings, setNotificationSettings] = useState<
@@ -526,6 +540,20 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     }
   };
 
+  //for s3 update
+  const handleS3SettingUpdate = (updatedS3Setting: any) => {
+    if (
+      (updatedS3Setting.aws_S3_types &&
+        updatedS3Setting.aws_arn_role !== null) ||
+      updatedS3Setting.aws_secretKey !== null ||
+      updatedS3Setting.aws_key !== null
+    ) {
+      setDisableSave(false);
+    }
+    setS3NotificationSettings(updatedS3Setting);
+    console.log(updatedS3Setting, 'values here alert');
+  };
+
   const removeNotificationSetting = (index: number) => {
     const settings = notificationSettings.slice();
 
@@ -559,7 +587,6 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
 
     notificationSettings.forEach(setting => {
       if (setting.method && setting.recipients.length) {
-        console.log("setting method value:",setting.method)
         recipients.push({
           recipient_config_json: {
             target: setting.recipients,
@@ -572,6 +599,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     const shouldEnableForceScreenshot = contentType === 'chart' && !isReport;
     const data: any = {
       ...currentAlert,
+      ...s3NotificationSettings,
       type: isReport ? t('Report') : t('Alert'),
       force_screenshot: shouldEnableForceScreenshot || forceScreenshot,
       validator_type: conditionNotNull ? 'not null' : 'operator',
@@ -591,7 +619,6 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
           ? DEFAULT_NOTIFICATION_FORMAT
           : reportFormat || DEFAULT_NOTIFICATION_FORMAT,
     };
-
     if (data.recipients && !data.recipients.length) {
       delete data.recipients;
     }
@@ -1104,7 +1131,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     <StyledModal
       className="no-content-padding"
       responsive
-      // disablePrimaryButton={disableSave}
+      disablePrimaryButton={disableSave}
       onHandledPrimaryAction={onSave}
       onHide={hide}
       primaryButtonName={
@@ -1459,7 +1486,11 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
             {notificationSettings.map((notificationSetting, i) => (
               <StyledNotificationMethodWrapper>
                 <NotificationMethod
+                  isEditMode={isEditMode}
                   setting={notificationSetting}
+                  s3Setting={s3NotificationSettings}
+                  onUpdateS3Setting={handleS3SettingUpdate}
+                  currentAlert={currentAlert}
                   index={i}
                   key={`NotificationMethod-${i}`}
                   onUpdate={updateNotificationSetting}

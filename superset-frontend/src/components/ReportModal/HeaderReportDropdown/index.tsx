@@ -128,6 +128,7 @@ export default function HeaderReportDropDown({
     if (!isFeatureEnabled(FeatureFlag.ALERT_REPORTS)) {
       return false;
     }
+
     if (!user?.userId) {
       // this is in the case that there is an anonymous user.
       return false;
@@ -146,6 +147,7 @@ export default function HeaderReportDropDown({
   const theme = useTheme();
   const prevDashboard = usePrevious(dashboardId);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [type, setType] = useState('');
   const toggleActiveKey = async (data: AlertObject, checked: boolean) => {
     if (data?.id) {
       dispatch(toggleActive(data, checked));
@@ -184,7 +186,8 @@ export default function HeaderReportDropDown({
     }
   }, [report]);
 
-  const handleShowMenu = () => {
+  const handleShowMenu = (type: string) => {
+    setType(type);
     if (setIsDropdownVisible) {
       setIsDropdownVisible(false);
       setShowModal(true);
@@ -211,7 +214,10 @@ export default function HeaderReportDropDown({
               {t('Email reports active')}
             </MenuItemWithCheckboxContainer>
           </Menu.Item>
-          <Menu.Item css={onMenuItemHover} onClick={handleShowMenu}>
+          <Menu.Item
+            css={onMenuItemHover}
+            onClick={() => handleShowMenu('email report')}
+          >
             {t('Edit email report')}
           </Menu.Item>
           <Menu.Item css={onMenuItemHover} onClick={handleDeleteMenuClick}>
@@ -221,7 +227,7 @@ export default function HeaderReportDropDown({
       )
     ) : (
       <Menu selectable={false} css={onMenuHover}>
-        <Menu.Item onClick={handleShowMenu}>
+        <Menu.Item onClick={() => handleShowMenu('email report')}>
           {DropdownItemExtension ? (
             <StyledDropdownItemWithIcon>
               <div>{t('Set up an email report')}</div>
@@ -231,6 +237,46 @@ export default function HeaderReportDropDown({
             t('Set up an email report')
           )}
         </Menu.Item>
+      </Menu>
+    );
+
+  const textMenuS3 = () =>
+    report ? (
+      isDropdownVisible && (
+        <Menu selectable={false} css={{ border: 'none' }}>
+          <Menu.Item
+            css={onMenuItemHover}
+            onClick={() => toggleActiveKey(report, !isReportActive)}
+          >
+            <MenuItemWithCheckboxContainer>
+              <Checkbox checked={isReportActive} onChange={noOp} />
+              {t('S3 reports active')}
+            </MenuItemWithCheckboxContainer>
+          </Menu.Item>
+          <Menu.Item
+            css={onMenuItemHover}
+            onClick={() => handleShowMenu('s3 report')}
+          >
+            {t('Edit S3 report')}
+          </Menu.Item>
+          <Menu.Item css={onMenuItemHover} onClick={handleDeleteMenuClick}>
+            {t('Delete S3 report')}
+          </Menu.Item>
+        </Menu>
+      )
+    ) : (
+      <Menu selectable={false} css={onMenuHover}>
+        <Menu.Item onClick={() => handleShowMenu('s3 report')}>
+          {DropdownItemExtension ? (
+            <StyledDropdownItemWithIcon>
+              <div>{t('Set up a S3 report')}</div>
+              <DropdownItemExtension />
+            </StyledDropdownItemWithIcon>
+          ) : (
+            t('Set up a S3 report')
+          )}
+        </Menu.Item>
+        <Menu.Divider />
       </Menu>
     );
   const menu = () => (
@@ -293,6 +339,7 @@ export default function HeaderReportDropDown({
       {canAddReports() && (
         <>
           <ReportModal
+            type={type}
             userId={user.userId}
             show={showModal}
             onHide={() => setShowModal(false)}
@@ -303,22 +350,10 @@ export default function HeaderReportDropDown({
               dashboardId ? CreationMethod.DASHBOARDS : CreationMethod.CHARTS
             }
           />
-          {useTextMenu ? textMenu() : iconMenu()}
-          {val && (
-            <Menu selectable={false} css={onMenuHover}>
-              <Menu.Item onClick={handleShowMenu}>
-                {DropdownItemExtension ? (
-                  <StyledDropdownItemWithIcon>
-                    <div>{t('Set up an AWS S3 report')}</div>
-                    <DropdownItemExtension />
-                  </StyledDropdownItemWithIcon>
-                ) : (
-                  t('Set up an AWS S3 report')
-                )}
-              </Menu.Item>
-              <Menu.Divider />
-            </Menu>
-          )}
+          {/* {useTextMenu ? textMenu() : iconMenu()} */}
+          {/* {useTextMenu ? (val ? textMenuS3() : textMenu()) : iconMenu()} */}
+          {useTextMenu ? textMenu() : textMenuS3()}
+
           {currentReportDeleting && (
             <DeleteModal
               description={t(
