@@ -72,20 +72,20 @@ class S3Notification(BaseNotification):
         files = self._get_inline_files()
         file_type = "csv" if self._content.csv else "png"
         bucket_name=json.loads(self._recipient.recipient_config_json)["target"]
-        s3_Subtype=self._content.aws_S3_types
+        s3_Subtype=self._awsConfiguration.aws_S3_types
 
         try:
 
             if s3_Subtype == S3SubTypes.S3_CRED:
 
-                aws_access_key_id = self._content.aws_key
-                aws_secret_access_key = self._content.aws_secretKey
+                aws_access_key_id = self._awsConfiguration.aws_key
+                aws_secret_access_key = self._awsConfiguration.aws_secretKey
 
                 self._execute_s3_upload(file_body=files, bucket_name=bucket_name, contentType=file_type, aws_access_key_id= aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
 
             elif s3_Subtype == S3SubTypes.S3_ROLE:
 
-                aws_cred=self._get_aws_keys(self._content.aws_arn_role)
+                aws_cred=self._get_aws_keys(self._awsConfiguration.aws_arn_role)
                 aws_access_key_id = aws_cred['AccessKeyId']
                 aws_secret_access_key = aws_cred['SecretAccessKey']
                 self._execute_s3_upload(file_body=files, bucket_name=bucket_name, contentType=file_type, aws_access_key_id= aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
