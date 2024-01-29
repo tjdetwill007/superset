@@ -392,13 +392,11 @@ class BaseReportState:
         
         aws_key=self._report_schedule.aws_key
         aws_secretKey=self._report_schedule.aws_secretKey
-        aws_arn_role=self._report_schedule.aws_arn_role
         aws_S3_types=self._report_schedule.aws_S3_types
 
         return AwsConfiguration(
             aws_key = aws_key,
             aws_secretKey = aws_secretKey,
-            aws_arn_role = aws_arn_role,
             aws_S3_types = aws_S3_types
         )
     def _send(

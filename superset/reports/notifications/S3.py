@@ -44,18 +44,9 @@ class S3Notification(BaseNotification):
             }
             return images
         return []
+
     
-    def _get_aws_keys(self, role_arn):
-        
-        aws_access_key_id=app.config["AWS_ACCESS_KEY"]
-        aws_secret_access_key=app.config["AWS_SECRET_KEY"]
-        sts_client = boto3.client('sts', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
-        response = sts_client.assume_role(
-            RoleArn=role_arn,RoleSessionName='AssumeRoleSession', DurationSeconds=3600)
-        temp_cred = response['Credentials']
-        return temp_cred
-    
-    def _execute_s3_upload(self, file_body, bucket_name, contentType, aws_access_key_id,aws_secret_access_key):
+    def _execute_s3_upload(self, file_body, bucket_name, contentType, aws_access_key_id=None,aws_secret_access_key=None):
         
         for key,file in file_body.items():
             file = BytesIO(file)
@@ -84,13 +75,11 @@ class S3Notification(BaseNotification):
                 self._execute_s3_upload(file_body=files, bucket_name=bucket_name, contentType=file_type, aws_access_key_id= aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
 
             elif s3_Subtype == S3SubTypes.S3_ROLE:
-
-                aws_cred=self._get_aws_keys(self._awsConfiguration.aws_arn_role)
-                aws_access_key_id = aws_cred['AccessKeyId']
-                aws_secret_access_key = aws_cred['SecretAccessKey']
-                self._execute_s3_upload(file_body=files, bucket_name=bucket_name, contentType=file_type, aws_access_key_id= aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
+                
+                self._execute_s3_upload(file_body=files, bucket_name=bucket_name, contentType=file_type)
 
             elif s3_Subtype == S3SubTypes.S3_CONFIG:
+
                 aws_access_key_id=app.config["AWS_ACCESS_KEY"]
                 aws_secret_access_key=app.config["AWS_SECRET_KEY"]
 

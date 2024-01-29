@@ -34,12 +34,10 @@ def upgrade():
 
     op.add_column('report_schedule', sa.Column('aws_key', sa.String(length=100), nullable=True))
     op.add_column('report_schedule', sa.Column('aws_secretKey', sa.String(length=100), nullable=True))
-    op.add_column('report_schedule', sa.Column('aws_arn_role', sa.String(length=200), nullable=True))
     op.add_column('report_schedule', sa.Column('aws_S3_types', sa.String(length=200), nullable=True))
 
 
 def downgrade():
     op.drop_column('report_schedule', 'aws_key')
     op.drop_column('report_schedule', 'aws_secretKey')
-    op.drop_column('report_schedule', 'aws_arn_role')
     op.drop_column('report_schedule', 'aws_S3_types')

@@ -39,7 +39,6 @@ class NotificationContent:
 class AwsConfiguration:
     aws_key: Optional[str] = None
     aws_secretKey: Optional[str]=None
-    aws_arn_role: Optional[str]=None
     aws_S3_types: Optional[str]=None
 
 class BaseNotification:  # pylint: disable=too-few-public-methods

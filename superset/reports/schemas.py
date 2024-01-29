@@ -210,7 +210,6 @@ class ReportSchedulePostSchema(Schema):
     force_screenshot = fields.Boolean(default=False)
     aws_key = fields.String(default=None, missing=None)
     aws_secretKey = fields.String(default=None, missing=None)
-    aws_arn_role = fields.String(default=None, missing=None)
     aws_S3_types= fields.String(default=None, missing=None)
 
     @validates_schema

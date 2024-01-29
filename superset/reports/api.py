@@ -122,7 +122,6 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "working_timeout",
         "aws_secretKey",
         "aws_key",
-        "aws_arn_role",
         "aws_S3_types",
     ]
     show_select_columns = show_columns + [
@@ -158,7 +157,6 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "type",
         "aws_secretKey",
         "aws_key",
-        "aws_arn_role",
         "aws_S3_types",
         "recipients.recipient_config_json",
     ]
