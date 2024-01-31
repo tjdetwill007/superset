@@ -211,7 +211,7 @@ class ReportSchedulePostSchema(Schema):
     aws_key = fields.String(default=None, missing=None)
     aws_secretKey = fields.String(default=None, missing=None)
     aws_S3_types= fields.String(default=None, missing=None)
-
+    
     @validates_schema
     def validate_report_references(  # pylint: disable=unused-argument,no-self-use
         self, data: Dict[str, Any], **kwargs: Any
@@ -317,5 +317,4 @@ class ReportSchedulePutSchema(Schema):
     force_screenshot = fields.Boolean(default=False)
     aws_key = fields.String(default=None, missing=None)
     aws_secretKey = fields.String(default=None, missing=None)
-    aws_arn_role = fields.String(default=None, missing=None)
     aws_S3_types= fields.String(default=None, missing=None)

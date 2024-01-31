@@ -29,11 +29,12 @@ down_revision = 'f3c2d8ec8595'
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
-
+from superset.extensions import encrypted_field_factory
+from sqlalchemy_utils import EncryptedType
 def upgrade():
 
-    op.add_column('report_schedule', sa.Column('aws_key', sa.String(length=100), nullable=True))
-    op.add_column('report_schedule', sa.Column('aws_secretKey', sa.String(length=100), nullable=True))
+    op.add_column('report_schedule', sa.Column('aws_key', EncryptedType(sa.String(1024)), nullable=True))
+    op.add_column('report_schedule', sa.Column('aws_secretKey', EncryptedType(sa.String(1024)), nullable=True))
     op.add_column('report_schedule', sa.Column('aws_S3_types', sa.String(length=200), nullable=True))
 
 

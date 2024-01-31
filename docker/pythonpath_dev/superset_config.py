@@ -24,7 +24,6 @@ import logging
 import os
 from datetime import timedelta
 from typing import Optional
-
 from cachelib.file import FileSystemCache
 from celery.schedules import crontab
 
