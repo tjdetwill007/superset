@@ -3,7 +3,7 @@ import logging
 import boto3
 from flask_babel import gettext as __
 from io import BytesIO
-import random
+from uuid import uuid4
 import datetime
 from superset import app
 from superset.exceptions import SupersetErrorsException
@@ -33,13 +33,13 @@ class S3Notification(BaseNotification):
         if self._content.csv:
     
                 data = {
-                    f'{name_prefix}{report_name}{random.randint(1,1000)}.csv': self._content.csv
+                    f'{name_prefix}{report_name}-{str(uuid4())[:8]}.csv': self._content.csv
                 }
                 return data
         
         if self._content.screenshots:
             images = {
-                f'{name_prefix}Screenshot{random.randint(1,1000)}.png': screenshot
+                f'{name_prefix}Screenshot-{str(uuid4())[:8]}.png': screenshot
                 for screenshot in self._content.screenshots
             }
             return images
