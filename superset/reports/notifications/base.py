@@ -61,7 +61,8 @@ class BaseNotification:  # pylint: disable=too-few-public-methods
         cls.plugins.append(cls)
 
     def __init__(
-        self, recipient: ReportRecipients, content: NotificationContent, awsConfiguration: AwsConfiguration = None
+        self, recipient: ReportRecipients, content: NotificationContent,
+        awsConfiguration: AwsConfiguration = None
     ) -> None:
         self._recipient = recipient
         self._content = content

@@ -389,10 +389,9 @@ class BaseReportState:
             header_data=header_data
         )
     def _get_aws_configuration(self) -> AwsConfiguration:
-        
-        aws_key=self._report_schedule.aws_key
-        aws_secretKey=self._report_schedule.aws_secretKey
-        aws_S3_types=self._report_schedule.aws_S3_types
+        aws_key = self._report_schedule.aws_key
+        aws_secretKey = self._report_schedule.aws_secretKey
+        aws_S3_types = self._report_schedule.aws_S3_types
 
         return AwsConfiguration(
             aws_key = aws_key,
@@ -413,7 +412,9 @@ class BaseReportState:
         for recipient in recipients:
             if recipient.type == ReportRecipientType.S3:
                 aws_Configuration=self._get_aws_configuration()
-                notification = create_notification(recipient, notification_content, aws_Configuration)
+                notification = create_notification(
+                    recipient, notification_content, aws_Configuration
+                    )
             else:
                 notification = create_notification(recipient, notification_content)
             try:
@@ -453,7 +454,6 @@ class BaseReportState:
         :raises: CommandException
         """
         notification_content = self._get_notification_content()
-        
         self._send(notification_content, self._report_schedule.recipients)
 
     def send_error(self, name: str, message: str) -> None:
